@@ -4,7 +4,7 @@
 #include <Servo.h>
 Servo servo1;
 Servo servo2;
-const int flexpin1= A0; 
+const int flexpin1= A0;     //flex sensörler tutma işlemi için(eli açma kapama durumu) ve robot kolun kendi ekseninde dönmesi için kullanılmıştır(mpu 6050 z ekseni kararsız çalışıyor)
 const int flexpin2= A1;
 MPU6050 mpu; 
 int16_t ax, ay, az; 
