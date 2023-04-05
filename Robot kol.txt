@@ -1,0 +1,100 @@
+#include "Wire.h"
+#include "I2Cdev.h" 
+#include "MPU6050.h" 
+#include <Servo.h>
+Servo servo1;
+Servo servo2;
+const int flexpin1= A0; 
+const int flexpin2= A1;
+MPU6050 mpu; 
+int16_t ax, ay, az; 
+int16_t gx, gy, gz; 
+
+#include <Servo.h>
+Servo arm1; 
+Servo arm2;
+Servo arm3;
+Servo arm4;
+
+
+void setup() 
+{ 
+Wire.begin(); 
+Serial.begin(38400); 
+Serial.println("Initialize MPU"); 
+mpu.initialize(); 
+Serial.println(mpu.testConnection() ? "Connected" : "Connection failed"); 
+  arm1.attach(6); 
+  arm2.attach(9); 
+  arm3.attach(11); 
+  arm4.attach(4);
+  servo1.attach(10);
+  servo2.attach(5);
+
+} 
+
+void loop() 
+{ 
+int flex1position;
+int servo1position;
+flex1position = analogRead(flexpin1);
+servo1position = map(flex1position, 150, 200, 0, 180);
+servo1position = constrain(servo1position, 0, 180);
+servo1.write(servo1position);  
+  
+   Serial.print("sensor1: ");
+   Serial.print(flex1position);
+   Serial.print(" servo1: ");
+   Serial.print(servo1position);
+
+ delay(100);
+ int flex2position;
+int servo2position;
+flex2position = analogRead(flexpin2);
+servo2position = map(flex2position, 150, 200, 0, 180);
+servo2position = constrain(servo2position, 0, 180);
+servo2.write(servo2position);  
+  
+   Serial.print("sensor2: ");
+   Serial.print(flex2position);
+   Serial.print(" servo2: ");
+   Serial.print(servo2position);
+
+mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); 
+  Serial.print("\t");
+  Serial.print("ax=  ");
+  Serial.println(ax);
+ 
+  Serial.print("\t");
+  Serial.print("ay=  ");
+  Serial.print(ay);
+
+  
+ Serial.print("\t");
+  Serial.print("az=  ");
+ Serial.print(az);
+
+
+   Serial.print("\t");
+  Serial.print("gx=  ");
+  Serial.print(gx);
+//
+//
+   Serial.print("\t");
+  Serial.print("gy=  ");
+  Serial.print(gy);
+//
+//  
+  Serial.print("\t");
+  Serial.print("gz=  ");
+  Serial.print(gz);
+
+arm1.write(map(ax, -17000, 17000, 0, 179));  
+arm2.write(map(az, -17000, 17000, 0, 179));  
+arm3.write(map(ay, -17000, 17000, 0, 179));  
+arm4.write(map(ay, -17000, 17000, 0, 179));
+
+
+delay(200);
+
+}
